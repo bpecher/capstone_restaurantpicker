@@ -11,4 +11,6 @@ Development Process Link: https://www.pivotaltracker.com/n/projects/2639609
 
 ### Installation:
 
-This application is designed for use with Windows. It will be planned to be released as an executable file with a .exe file extension that can be downloaded and then launched within the Windows OS. The software does rely on a Yelp API and a Google Maps API, so Internet access will be required to utilize the application. The API have rate limits, so the number of requests in an allotted amount of time are restrcted by the API utilized for the application. It should require .NET Framework 4.5 or higher as well. The project is being coded in a version of Microsoft Visual Studio like 2022.  
+This application is designed for use with Windows. It will be planned to be released as an executable file with a .exe file extension that can be downloaded and then launched within the Windows OS. The software does rely on a Yelp API and a Google Maps API, so Internet access will be required to utilize the application. The API have rate limits, so the number of requests in an allotted amount of time are restrcted by the API utilized for the application. It should require .NET Framework 4.5 or higher as well. The project is being coded in a version of Microsoft Visual Studio like 2022.
+
+[Visual Studio 2022 Configuration](docs/.vsconfig)
