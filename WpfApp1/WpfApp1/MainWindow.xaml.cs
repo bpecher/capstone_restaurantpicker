@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
@@ -98,7 +99,7 @@ namespace WpfApp1
                 client2.DefaultRequestHeaders.Add("Authorization", "Bearer 0B0nln3vXhrnfy2wELDtoYSEc1q8bIbo_bKfrgeqcfgf88YMpcS2ge9T9oK0sPRoNH38tlX0AEcxnJzFLguGcqQSJWkUxsP179-KilrCatxgjKxSJXoHSa9XClczZHYx");
 
                 // Get the response from the Yelp API
-                string response = await client2.GetStringAsync($"https://api.yelp.com/v3/businesses/search?term=food&location={location}");
+                string response = await client2.GetStringAsync($"https://api.yelp.com/v3/businesses/search?term=restaurants&location={location}&limit=25&sort_by=rating");
 
                 // Parse the response into a JObject
                 JObject json = JObject.Parse(response);
@@ -130,13 +131,11 @@ namespace WpfApp1
             }
         }
 
+        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, click the 'Search' button to initiate a location search. We'll show you a list of the top-rated restaurants in your area.\n\nIf you're feeling indecisive, click the 'Pick for Me' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
+        }
+
     }
 }
-
-    
-    
-
-        
-
-    
 
