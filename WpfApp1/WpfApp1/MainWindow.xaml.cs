@@ -50,6 +50,8 @@ namespace WpfApp1
             {
                 ResultsListBox.Items.Add(restaurant);
             }
+            // Show a message box with the number of results
+            MessageBox.Show($"These are the {_restaurants.Length} top rated restaurant results for your location.");
         }
         // A method to get the location of the user
         private async Task<string> GetLocation()
@@ -77,7 +79,7 @@ namespace WpfApp1
 
     if (_restaurants == null || _restaurants.Length == 0)
     {
-        MessageBox.Show("Please search for restaurants first.");
+        MessageBox.Show("Please perform a search for restaurants first.");
         return;
     }
             // Generate a random index
@@ -88,7 +90,7 @@ namespace WpfApp1
 
             // Show a message box with the selected restaurant
             ResultsListBox.SelectedIndex = index;
-            MessageBox.Show($"How about: {restaurant}");
+            MessageBox.Show($"We selected: {restaurant}");
 }
 
         private async Task<string[]> GetRestaurants(string location)
@@ -98,8 +100,14 @@ namespace WpfApp1
                 // Add authorization header to the client
                 client2.DefaultRequestHeaders.Add("Authorization", "Bearer 0B0nln3vXhrnfy2wELDtoYSEc1q8bIbo_bKfrgeqcfgf88YMpcS2ge9T9oK0sPRoNH38tlX0AEcxnJzFLguGcqQSJWkUxsP179-KilrCatxgjKxSJXoHSa9XClczZHYx");
 
-                // Get the response from the Yelp API
-                string response = await client2.GetStringAsync($"https://api.yelp.com/v3/businesses/search?term=restaurants&location={location}&limit=25&sort_by=rating");
+                // Get the selected value of the NumRestaurantsComboBox as a ComboBoxItem
+                ComboBoxItem selectedItem = NumRestaurantsComboBox.SelectedItem as ComboBoxItem;
+
+                // Extract the integer value from the Content property of the selected ComboBoxItem
+                int numRestaurants = Int32.Parse(selectedItem.Content.ToString());
+
+                // Use the selected value in the API request
+                string response = await client2.GetStringAsync($"https://api.yelp.com/v3/businesses/search?term=restaurants&location={location}&limit={numRestaurants}&sort_by=rating");
 
                 // Parse the response into a JObject
                 JObject json = JObject.Parse(response);
@@ -133,7 +141,7 @@ namespace WpfApp1
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, click the 'Search' button to initiate a location search. We'll show you a list of the top-rated restaurants in your area.\n\nIf you're feeling indecisive, click the 'Pick for Me' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
+            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, choose the number of restaurants from the drop-down and click the 'Search' button to initiate a location search. We'll show you a list of the top-rated restaurants in your area.\n\nIf you're feeling indecisive, click the 'Pick for Me' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
         }
 
     }
