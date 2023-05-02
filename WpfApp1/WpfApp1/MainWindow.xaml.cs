@@ -130,8 +130,19 @@ namespace WpfApp1
                     // Get the address of the business
                     string address = string.Join(", ", business["location"]["address1"], business["location"]["city"], business["location"]["state"], business["location"]["zip_code"]);
 
-                    // Add the name and address of the business to the array
-                    restaurants[i] = $"{name} ({address})";
+                    // Get the phone number of the business
+                    string phone = (string)business["phone"];
+
+                    // Define the maximum width of each column
+                    int nameWidth = 75;
+                    int addressWidth = 75;
+                    int phoneWidth = 30;
+
+                    // Add the name, address, and phone number of the restaurant to the array
+                    string nameColumn = name.PadRight(nameWidth);
+                    string addressColumn = address.PadRight(addressWidth);
+                    string phoneColumn = phone.PadRight(phoneWidth);
+                    restaurants[i] = $"{nameColumn}{addressColumn}{phoneColumn}";
                 }
 
                 // Return the array of restaurants

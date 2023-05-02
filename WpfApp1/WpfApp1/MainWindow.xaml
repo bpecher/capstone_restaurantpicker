@@ -6,8 +6,8 @@
         mc:Ignorable="av" 
         x:Class="WpfApp1.MainWindow"
         Title="Restaurant Picker" 
-        Height="600" 
-        Width="800"
+        Height="720" 
+        Width="1280"
     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <Window.Resources>
         <Style x:Key="FocusVisual">
