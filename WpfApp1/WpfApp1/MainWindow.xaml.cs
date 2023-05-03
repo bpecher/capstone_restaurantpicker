@@ -90,7 +90,7 @@ namespace WpfApp1
 
             // Show a message box with the selected restaurant
             ResultsListBox.SelectedIndex = index;
-            MessageBox.Show($"We selected: {restaurant}");
+            MessageBox.Show($"Go check out this restaurant or click OK and try again:\n\n{restaurant}");
 }
 
         private async Task<string[]> GetRestaurants(string location)
@@ -128,21 +128,19 @@ namespace WpfApp1
                     string name = (string)business["name"];
 
                     // Get the address of the business
-                    string address = string.Join(", ", business["location"]["address1"], business["location"]["city"], business["location"]["state"], business["location"]["zip_code"]);
+                    string address = string.Join(", ", business["location"]["address1"] + " " + business["location"]["city"], business["location"]["state"] + " " + business["location"]["zip_code"]);
 
                     // Get the phone number of the business
                     string phone = (string)business["phone"];
 
-                    // Define the maximum width of each column
-                    int nameWidth = 75;
-                    int addressWidth = 75;
-                    int phoneWidth = 30;
+                    // Remove any non-numeric characters from the phone number
+                    string digitsOnly = new string(phone.Where(char.IsDigit).ToArray());
+
+                    // Format the phone number with hyphens
+                    string formattedPhone = $"{digitsOnly.Substring(0, 1)}-{digitsOnly.Substring(1, 3)}-{digitsOnly.Substring(4, 3)}-{digitsOnly.Substring(7)}";
 
                     // Add the name, address, and phone number of the restaurant to the array
-                    string nameColumn = name.PadRight(nameWidth);
-                    string addressColumn = address.PadRight(addressWidth);
-                    string phoneColumn = phone.PadRight(phoneWidth);
-                    restaurants[i] = $"{nameColumn}{addressColumn}{phoneColumn}";
+                    restaurants[i] = $"Restaurant Name: {name}\nAddress: {address}\nPhone Number: {formattedPhone}\n";
                 }
 
                 // Return the array of restaurants
@@ -152,7 +150,7 @@ namespace WpfApp1
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, choose the number of restaurants from the drop-down and click the 'Search' button to initiate a location search. We'll show you a list of the top-rated restaurants in your area.\n\nIf you're feeling indecisive, click the 'Pick for Me' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
+            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, choose the number of restaurants from the drop-down and click the 'Search Restaurants' button to initiate a location search. We'll show you a list of the top-rated restaurants in your area.\n\nIf you're feeling indecisive on where to eat, click the 'Random Restaurant' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
         }
 
     }
