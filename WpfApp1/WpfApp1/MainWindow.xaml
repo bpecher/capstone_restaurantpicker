@@ -338,7 +338,7 @@
             </Button>
         </Grid>
         <Grid Grid.Column="1">
-            <Button x:Name="InfoButton" Content="Help" Width="150" Click="InfoButton_Click" Margin="20,0,-40,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="yellow" >
+            <Button x:Name="InfoButton" Content="Help" Click="InfoButton_Click" Margin="68,10,15,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="yellow" >
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>

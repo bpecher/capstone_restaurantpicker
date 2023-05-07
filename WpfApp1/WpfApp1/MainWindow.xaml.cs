@@ -115,7 +115,7 @@ namespace WpfApp1
                 // Get the "businesses" JArray from the response
                 JArray businesses = (JArray)json["businesses"];
 
-                // Create an array to store the names and addresses of the restaurants
+                // Create an array to store the names, addresses, ratings, and review counts of the restaurants
                 string[] restaurants = new string[businesses.Count];
 
                 // Loop through each business in the "businesses" JArray
@@ -139,8 +139,14 @@ namespace WpfApp1
                     // Format the phone number with hyphens
                     string formattedPhone = $"{digitsOnly.Substring(0, 1)}-{digitsOnly.Substring(1, 3)}-{digitsOnly.Substring(4, 3)}-{digitsOnly.Substring(7)}";
 
-                    // Add the name, address, and phone number of the restaurant to the array
-                    restaurants[i] = $"Restaurant Name: {name}\nAddress: {address}\nPhone Number: {formattedPhone}\n";
+                    // Get the rating of the business
+                    double rating = (double)business["rating"];
+
+                    // Get the number of reviews of the business
+                    int reviewCount = (int)business["review_count"];
+
+                    // Add the name, address, phone number, ratings, and review counts of the restaurant to the array
+                    restaurants[i] = $"Restaurant Name: {name}\nAddress: {address}\nPhone Number: {formattedPhone}\nRating: ({rating} stars)\nNumber of Reviews: ({reviewCount})\n";
                 }
 
                 // Return the array of restaurants
@@ -150,7 +156,7 @@ namespace WpfApp1
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, choose the number of restaurants from the drop-down and click the 'Search Restaurants' button to initiate a location search. We'll show you a list of the top-rated restaurants in your area.\n\nIf you're feeling indecisive on where to eat, click the 'Random Restaurant' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
+            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, choose the number of restaurants from the drop-down and click the 'Search Restaurants' button to initiate a location search.\n\nWe'll show you a list of the top-rated restaurants in your area. The results display based on an adjusted rating value that takes into account the number of ratings.\n\nIf you're feeling indecisive on where to eat, click the 'Random Restaurant' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
         }
 
     }
