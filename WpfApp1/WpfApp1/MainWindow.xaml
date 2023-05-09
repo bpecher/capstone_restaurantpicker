@@ -345,6 +345,11 @@
             </Button>
         </Grid>
         <ListBox x:Name="ResultsListBox" Grid.Row="2" Margin="0,0,0,0" FontSize="16" av:ItemsSource="{av:SampleData ItemCount=1}" Grid.ColumnSpan="2" Foreground="black" Background="#FF0C91BD"/>
+        <Button x:Name="HotAndNewButton" Content="Hot And New" Click="HotAndNewButton_Click" Margin="721,10,0,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="#FF0C91BD" HorizontalAlignment="Left" Width="164" Grid.Row="1" >
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
 
 
     </Grid>
