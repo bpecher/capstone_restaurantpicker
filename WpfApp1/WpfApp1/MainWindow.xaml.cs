@@ -77,20 +77,23 @@ namespace WpfApp1
         private async void PickForMeButton_Click(object sender, RoutedEventArgs e)
         {
 
-    if (_restaurants == null || _restaurants.Length == 0)
-    {
-        MessageBox.Show("Please perform a search for restaurants first.");
-        return;
-    }
-            // Generate a random index
-            int index = new Random().Next(_restaurants.Length);
+            if (_restaurants != null && _restaurants.Length != 0)
+            {
+                // Generate a random index
+                int index = new Random().Next(_restaurants.Length);
 
-            // Select the restaurant in the ResultsListBox
-            string restaurant = _restaurants[index];
+                // Select the restaurant in the ResultsListBox
+                string restaurant = _restaurants[index];
+                ResultsListBox.SelectedIndex = index;
 
-            // Show a message box with the selected restaurant
-            MessageBox.Show($"{restaurant}\nGo check out this restaurant or click OK on this dialogue box and then click Randon Restaurant for a new suggestion.");
-            ResultsListBox.SelectedIndex = index;
+                // Show a message box with the selected restaurant
+                MessageBox.Show($"{restaurant}\nGo check out this restaurant or click OK on this dialogue box and then click Randon Restaurant for a new suggestion.");
+            }
+            else
+            {
+                MessageBox.Show("Please perform a search for restaurants first.");
+                return;
+            }
         }
 
         private async Task<string[]> GetRestaurants(string location)
@@ -171,6 +174,9 @@ namespace WpfApp1
 
             // Get list of hot_and_new restaurants
             string[] hotAndNewRestaurants = await getHotAndNewRestaurants(location);
+
+            // Update the _restaurants array with hot and new restaurants
+            _restaurants = hotAndNewRestaurants;
 
             // Clear existing list of restaurants that are shown in the ResultsListBox
             ResultsListBox.Items.Clear();
