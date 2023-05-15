@@ -89,9 +89,9 @@ namespace WpfApp1
             string restaurant = _restaurants[index];
 
             // Show a message box with the selected restaurant
+            MessageBox.Show($"{restaurant}\nGo check out this restaurant or click OK on this dialogue box and then click Randon Restaurant for a new suggestion.");
             ResultsListBox.SelectedIndex = index;
-            MessageBox.Show($"Go check out this restaurant or click OK and try again:\n\n{restaurant}");
-}
+        }
 
         private async Task<string[]> GetRestaurants(string location)
         {
@@ -160,7 +160,7 @@ namespace WpfApp1
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, choose the number of restaurants from the drop-down and click the 'Search Restaurants' button to initiate a location search.\n\nWe'll show you a list of the top-rated restaurants in your area. The results display based on an adjusted rating value that takes into account the number of ratings.\n\nIf you're feeling indecisive on where to eat, click the 'Random Restaurant' button and we'll randomly select a restaurant from the list for you!\n\nEnjoy your meal!");
+            MessageBox.Show("Welcome to our restaurant recommendation app! \n\nTo get started, choose the number of restaurants from the drop-down and click the 'Search Restaurants' button to initiate a location search.\n\nWe'll show you a list of the top-rated restaurants, based on the number of restaurants you chose, that are in your area. The results display based on an adjusted rating value that takes into account the number of ratings.\n\nIf you're feeling indecisive on where to eat, click the 'Random Restaurant' button and we'll randomly select a restaurant from the list for you!\n\nChoose the number of restaurants and click the 'Hot and New' button to see the newest restaurants added to Yelp in your area.\n\nEnjoy your meal!");
         }
 
         private async void HotAndNewButton_Click(object sender, RoutedEventArgs e)
