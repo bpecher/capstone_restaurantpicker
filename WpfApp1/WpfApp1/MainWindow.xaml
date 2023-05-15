@@ -366,6 +366,11 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
+        <Button x:Name="onlyOpenButton" Content="Open Now" Margin="930,10,186,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="Blue" Grid.Row="1"  Click="onlyOpenButton_click" Grid.ColumnSpan="2">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
 
 
     </Grid>
