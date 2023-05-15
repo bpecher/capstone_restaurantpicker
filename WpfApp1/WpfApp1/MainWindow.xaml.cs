@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 
 
@@ -41,15 +43,19 @@ namespace WpfApp1
             // Get the location of the user
             string location = await GetLocation();
             LocationTextBlock.Text = location;
+
             // Get the list of restaurants in the location
             _restaurants = await GetRestaurants(location);
+
             // Clear the previous list of restaurants in the ResultsListBox
             ResultsListBox.Items.Clear();
+
             // Add the new list of restaurants to the ResultsListBox
             foreach (string restaurant in _restaurants)
             {
                 ResultsListBox.Items.Add(restaurant);
             }
+
             // Show a message box with the number of results
             MessageBox.Show($"These are the {_restaurants.Length} top rated restaurant results for your location.");
         }
@@ -76,7 +82,6 @@ namespace WpfApp1
         // The event handler for the "Pick for Me" button click
         private async void PickForMeButton_Click(object sender, RoutedEventArgs e)
         {
-
             if (_restaurants != null && _restaurants.Length != 0)
             {
                 // Generate a random index
@@ -84,16 +89,42 @@ namespace WpfApp1
 
                 // Select the restaurant in the ResultsListBox
                 string restaurant = _restaurants[index];
-                ResultsListBox.SelectedIndex = index;
+
+                // Remove the URL from the restaurant string
+                string restaurantWithoutUrl = RemoveUrlFromRestaurant(restaurant);
 
                 // Show a message box with the selected restaurant
-                MessageBox.Show($"{restaurant}\nGo check out this restaurant or click OK on this dialogue box and then click Randon Restaurant for a new suggestion.");
+                MessageBox.Show($"{restaurantWithoutUrl}\nGo check out this restaurant or click OK on this dialogue box and then click Random Restaurant for a new suggestion.");
+
+                // Set the SelectedIndex of the ListBox to highlight the item
+                ResultsListBox.SelectedIndex = index;
+
+                // Move the cursor focus to the ListBox
+                Keyboard.Focus(ResultsListBox);
+
+                // Scroll the selected item into view
+                ResultsListBox.ScrollIntoView(ResultsListBox.SelectedItem);
             }
             else
             {
                 MessageBox.Show("Please perform a search for restaurants first.");
                 return;
             }
+        }
+
+        private string RemoveUrlFromRestaurant(string restaurant)
+        {
+            // Find the index of the URL within the restaurant information
+            int urlIndex = restaurant.IndexOf("https://www.yelp.com/");
+
+            if (urlIndex != -1)
+            {
+                // Remove the URL from the restaurant string
+                string restaurantWithoutUrl = restaurant.Substring(0, urlIndex);
+                return restaurantWithoutUrl;
+            }
+
+            return restaurant;
         }
 
         private async Task<string[]> GetRestaurants(string location)
@@ -148,12 +179,15 @@ namespace WpfApp1
                     // Get the rating of the business
                     double rating = (double)business["rating"];
 
+                    //Get the url of the business
+                    string url = (string)business["url"];
+
                     // Get the number of reviews of the business
                     int reviewCount = (int)business["review_count"];
 
-                    // Add the name, address, phone number, price, ratings, and review counts of the restaurant to the array
+                    // Add the name, address, phone number, price, ratings, review counts, and Yelp URL of the restaurant to the array
                     restaurants[i] = $"Restaurant Name: {name} {(price == "unavailable" ? "\nPrice: Unavailable" : "\nPrice: " + price)}" + $"\nAddress: " +
-                        $"{address}\nPhone Number: {formattedPhone}\nRating: ({rating} stars)\nNumber of Reviews: ({reviewCount})\n";
+                        $"{address}\nPhone Number: {formattedPhone}\nRating: ({rating} stars)\nNumber of Reviews: ({reviewCount})\n{url}\n";
                 }
 
                 // Return the array of restaurants
@@ -242,11 +276,54 @@ namespace WpfApp1
                     // Get review count of the business
                     int reviewCount = (int)business["review_count"];
 
+                    //Get the url of the business
+                    string url = (string)business["url"];
+
                     // Add restaurant to array of restaurants
-                    hotAndNewRestaurants[i] = $"{name}\n{address}\nRating: {rating} stars\n({reviewCount} reviews)\n";
+                    hotAndNewRestaurants[i] = $"{name}\n{address}\nRating: {rating} stars\n({reviewCount} reviews)\n{url}\n";
                 }
                 return hotAndNewRestaurants;
             }
+        }
+        private void ResultsListBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (ResultsListBox.SelectedItem != null)
+            {
+                // Retrieve the selected item
+                string selectedItem = ResultsListBox.SelectedItem.ToString();
+
+                // Extract the URL from the selected item
+                string selectedUrl = GetRestaurantUrl(selectedItem);
+
+                if (!string.IsNullOrEmpty(selectedUrl))
+                {
+                    // Open the URL in the default web browser
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = selectedUrl,
+                        UseShellExecute = true
+                    });
+                }
+                else
+                {
+                    MessageBox.Show("The selected item does not have a URL.");
+                }
+            }
+        }
+
+        private string GetRestaurantUrl(string restaurantInfo)
+        {
+            // Find the index of the URL within the restaurant information
+            int urlIndex = restaurantInfo.IndexOf("https://www.yelp.com/");
+
+            if (urlIndex != -1)
+            {
+                // Extract the URL from the restaurant information
+                string selectedUrl = restaurantInfo.Substring(urlIndex);
+                return selectedUrl;
+            }
+
+            return null;
         }
     }
 }
