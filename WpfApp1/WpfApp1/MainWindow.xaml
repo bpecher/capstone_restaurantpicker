@@ -7,7 +7,7 @@
         x:Class="WpfApp1.MainWindow"
         Title="Restaurant Picker" 
         Height="720" 
-        Width="1280"
+        Width="1000"
     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <Window.Resources>
         <Style x:Key="FocusVisual">
@@ -297,7 +297,7 @@
                     <Setter Property="Background" Value="#8EA0E0" />
                 </Trigger>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                    <Setter Property="Background" Value="#7f8fc9" />
+                    <Setter Property="Background" Value="#7584ba" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -342,12 +342,12 @@
             <TextBlock Text="Location: " Margin="10,13,440,7" FontSize="16" Foreground="black"/>
             <TextBlock x:Name="LocationTextBlock" Margin="83,13,445,7" FontSize="16" Foreground="black" Grid.ColumnSpan="3"/>
 
-            <Button x:Name="SearchButton" Content="Search Restaurants" Click="Button_Click" Margin="352,-35,0,55" Width="150" FontSize="16" Foreground="black" Background="Green" RenderTransformOrigin="-2.033,0.871" HorizontalAlignment="Left" >
+            <Button x:Name="SearchButton" Content="Search Restaurants" Click="Button_Click" Margin="352,-35,0,55" Width="150" FontSize="16" Foreground="black" Background="#C0C0C0" RenderTransformOrigin="-2.033,0.871" HorizontalAlignment="Left" >
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="PickForMeButton" Content="Random Restaurant" Click="PickForMeButton_Click" Margin="1,-35,0,55" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="Green" Grid.Column="1" HorizontalAlignment="Left" Width="164" >
+            <Button x:Name="PickForMeButton" Content="Random Restaurant" Click="PickForMeButton_Click" Margin="1,-35,0,55" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="#C0C0C0" Grid.Column="1" HorizontalAlignment="Left" Width="164" >
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
@@ -361,12 +361,12 @@
             </Button>
         </Grid>
         <ListBox x:Name="ResultsListBox" Grid.Row="2" Margin="0,0,0,0" FontSize="16" av:ItemsSource="{av:SampleData ItemCount=1}" Grid.ColumnSpan="2" Foreground="Black" AlternationCount="2" ItemContainerStyle="{StaticResource AlternateListBoxItemStyle}" SelectionChanged="ResultsListBox_Click" />
-        <Button x:Name="HotAndNewButton" Content="Hot And New" Click="HotAndNewButton_Click" Margin="0,10,10,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="#CC5500" HorizontalAlignment="Right" Width="164" Grid.Row="1" Grid.Column="1" >
+        <Button x:Name="HotAndNewButton" Content="Hot And New" Click="HotAndNewButton_Click" Margin="0,10,10,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="#A9A9A9" HorizontalAlignment="Right" Width="164" Grid.Row="1" Grid.Column="1" >
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button x:Name="onlyOpenButton" Content="Open Now" Margin="930,10,186,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="Blue" Grid.Row="1"  Click="onlyOpenButton_click" Grid.ColumnSpan="2">
+        <Button x:Name="onlyOpenButton" Content="Open Now" Margin="623,10,0,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="#899499" Grid.Row="1"  Click="onlyOpenButton_click" HorizontalAlignment="Left" Width="164">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
