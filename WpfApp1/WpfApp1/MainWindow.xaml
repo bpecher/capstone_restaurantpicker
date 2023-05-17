@@ -391,11 +391,13 @@
             </Button.Effect>
         </Button>
         <Grid Grid.ColumnSpan="2" Margin="743,0,0,0" Grid.Row="2">
-            <ListBox x:Name="PreviousSuggestionsListbox">
-                <Label Content="Previously Suggested Restaurants"/>
+            <Label Content="Previously Suggested Restaurants" FontSize="14" Background="#FF74787A" Width="244"/>
+            <ListBox x:Name="PreviousSuggestionsListbox" Margin="0,27,0,0">
+                
             </ListBox>
+            <Label Content="Previously Viewed Restaurants" FontSize="14" Background="#FF74787A" Width="253" Margin="2,274,2,0"/>
             <ListBox x:Name="ViewedListbox" Margin="0,306,0,0">
-                <Label Content="Previously Viewed Restaurants"/>
+                
             </ListBox>
         </Grid>
     </Grid>
