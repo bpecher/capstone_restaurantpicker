@@ -41,6 +41,18 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
+
+            // clear suggested restaruants table on initial load
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                SQLiteCommand dropCommand = new SQLiteCommand("DROP TABLE IF EXISTS PreviousSuggestions", connection);
+
+                dropCommand.ExecuteNonQuery();
+
+                connection.Close();
+            }
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -64,6 +76,7 @@ namespace WpfApp1
             // Show a message box with the number of results
             MessageBox.Show($"These are the {_restaurants.Length} top rated restaurant results for your location.");
         }
+
         // A method to get the location of the user
         private async Task<string> GetLocation()
         {
@@ -445,6 +458,43 @@ namespace WpfApp1
                 else
                 {
                     MessageBox.Show("The selected item does not have a URL.");
+                }
+
+                // save viewed restaurant to db
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // create table if it doesn't already exist
+                    SQLiteCommand createCommand = new SQLiteCommand("CREATE TABLE IF NOT EXISTS \"PreviousViewed\" (\"RestaurantString\" BLOB)", connection);
+                    createCommand.ExecuteNonQuery();
+
+                    // insert suggested restaurant into db
+                    string query = "INSERT INTO PreviousViewed (RestaurantString) VALUES (@Value)";
+                    SQLiteCommand insertCommand = new SQLiteCommand(query, connection);
+                    insertCommand.Parameters.AddWithValue("@Value", selectedItem);
+                    insertCommand.ExecuteNonQuery();
+
+                    connection.Close();
+                }
+
+                // refresh listbox to show previous suggested restaurants
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // query db for results
+                    SQLiteCommand selectCommand = new SQLiteCommand("SELECT * FROM PreviousViewed", connection);
+                    SQLiteDataReader reader = selectCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        string restaurantString = reader.GetString(0);
+
+                        ViewedListbox.Items.Add(restaurantString);
+                    }
+                    reader.Close();
+
+                    connection.Close();
                 }
             }
         }
