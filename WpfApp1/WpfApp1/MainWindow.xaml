@@ -385,6 +385,11 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
+        <Button x:Name="dealsButton" Content="Deals" Margin="450,10,203,10" RenderTransformOrigin="1.005,0.68" FontSize="16" Foreground="black" Background="#899499" Grid.Row="1"  Click="dealsButton_click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
         <Grid Grid.ColumnSpan="2" Margin="743,0,0,0" Grid.Row="2">
             <ListBox x:Name="PreviousSuggestionsListbox">
                 <Label Content="Previously Suggested Restaurants"/>

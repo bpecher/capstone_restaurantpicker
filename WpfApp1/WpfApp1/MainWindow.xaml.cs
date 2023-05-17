@@ -289,6 +289,92 @@ namespace WpfApp1
             MessageBox.Show($"These are the {hotAndNewRestaurants.Length} newest restaurants that have been added to Yelp in your location.");
         }
 
+        private async void dealsButton_click(object sender, RoutedEventArgs e)
+        {
+            // Get location of user
+            string location = await GetLocation();
+            LocationTextBlock.Text = location;
+
+            // Get list of restaurants with deals
+            string[] restaurants = await getDeals(location);
+
+            // Update the _restaurants array 
+            _restaurants = restaurants;
+
+            // Clear existing list of restaurants that are shown in the ResultsListBox
+            ResultsListBox.Items.Clear();
+
+            // Add new list of restaurants to ResultsListBox
+            foreach (string restaurant in restaurants)
+            {
+                ResultsListBox.Items.Add(restaurant);
+            }
+
+            // Show a message box with the total number of results
+            MessageBox.Show($"These are the {restaurants.Length} restaurants that are currently offering deals.");
+        }
+
+        private async Task<string[]> getDeals(string location)
+        {
+            using (var client3 = new HttpClient())
+            {
+                // Add authorization header to the client
+                client3.DefaultRequestHeaders.Add("Authorization", "Bearer 0B0nln3vXhrnfy2wELDtoYSEc1q8bIbo_bKfrgeqcfgf88YMpcS2ge9T9oK0sPRoNH38tlX0AEcxnJzFLguGcqQSJWkUxsP179-KilrCatxgjKxSJXoHSa9XClczZHYx");
+
+                // Get the selected value of the NumRestaurantsComboBox as a ComboBoxItem
+                ComboBoxItem selectedItem = NumRestaurantsComboBox.SelectedItem as ComboBoxItem;
+
+                // Extract the integer value from the Content property of the selected ComboBoxItem
+                int numRestaurants = Int32.Parse(selectedItem.Content.ToString());
+
+                // Use open to filter search results to only get resteraunts with deals
+                string response = await client3.GetStringAsync($"https://api.yelp.com/v3/businesses/search?term=restaurants&location={location}&limit={numRestaurants}&deals=true");
+
+                // Put response into a JObject
+                JObject json = JObject.Parse(response);
+
+                // Get "businesses" JArray from the response
+                JArray businesses = (JArray)json["businesses"];
+
+                // If no results, return empty array (or something else if we want that)
+                if (businesses.Count == 0)
+                {
+                    return new string[0];
+                }
+
+                // Create an array to store names/addresses/ratings/review counts of restaurants
+                string[] deals = new string[businesses.Count];
+
+                // Loop through each business in "businesses" JArray
+                for (int i = 0; i < businesses.Count; i++)
+                {
+
+                    // Get the current business as a JObject
+                    JObject business = (JObject)businesses[i];
+
+                    // Get the name of the business
+                    string name = (string)business["name"];
+
+                    // Get the address of the business
+                    string address = string.Join(", ", business["location"]["address1"] + " " + business["location"]["city"],
+                        business["location"]["state"] + " " + business["location"]["zip_code"]);
+
+                    // Get the rating of the business
+                    double rating = (double)business["rating"];
+
+                    // Get review count of the business
+                    int reviewCount = (int)business["review_count"];
+
+                    //Get the url of the business
+                    string url = (string)business["url"];
+
+                    // Add restaurant to array of restaurants
+                    deals[i] = $"{name}\n{address}\nRating: {rating} stars\n({reviewCount} reviews)\n{url}\n";
+                }
+                return deals;
+            }
+        }
+
         private async void onlyOpenButton_click(object sender, RoutedEventArgs e)
         {
             // Get location of user
@@ -298,7 +384,7 @@ namespace WpfApp1
             // Get list of open restaurants
             string[] openRestaurants = await getOpenRestaurants(location);
 
-            // Update the _restaurants array with hot and new restaurants
+            // Update the _restaurants array
             _restaurants = openRestaurants;
 
             // Clear existing list of restaurants that are shown in the ResultsListBox
