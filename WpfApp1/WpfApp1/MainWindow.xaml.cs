@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using System.Data.SQLite;
 
 
 
@@ -32,6 +33,10 @@ namespace WpfApp1
     {
         // An array to store the list of restaurants
         private string[] _restaurants;
+
+        // db connection string
+        string connectionString = "Data Source=C:\\Users\\Emmet\\Desktop\\capstone_restaurantpicker\\WpfApp1\\WpfApp1\\RestaurantPicker.db;Version=3";  
+
 
         public MainWindow()
         {
@@ -104,6 +109,52 @@ namespace WpfApp1
 
                 // Scroll the selected item into view
                 ResultsListBox.ScrollIntoView(ResultsListBox.SelectedItem);
+
+                // store suggested restaurant in db
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // create table if it doesn't already exist
+                    SQLiteCommand createCommand = new SQLiteCommand("CREATE TABLE IF NOT EXISTS \"PreviousSuggestions\" (\"RestaurantString\" BLOB)", connection);
+                    createCommand.ExecuteNonQuery();
+
+                    // insert suggested restaurant into db
+                    string query = "INSERT INTO PreviousSuggestions (RestaurantString) VALUES (@Value)";
+                    SQLiteCommand insertCommand = new SQLiteCommand(query, connection);
+                    insertCommand.Parameters.AddWithValue("@Value",restaurantWithoutUrl);
+                    insertCommand.ExecuteNonQuery();
+
+                    connection.Close();
+                }
+
+                // refresh listbox to show previous suggested restaurants
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // query db for results
+                    SQLiteCommand selectCommand = new SQLiteCommand("SELECT * FROM PreviousSuggestions", connection);
+                    SQLiteDataReader reader = selectCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        string restaurantString = reader.GetString(0);
+
+                        PreviousSuggestionsListbox.Items.Add(restaurantString);
+                    }
+                    reader.Close();
+
+                    connection.Close();
+                }
+
+                // Clear the previous list of restaurants in the ResultsListBox
+                ResultsListBox.Items.Clear();
+
+                // Add the new list of restaurants to the ResultsListBox
+                foreach (string restaurants in _restaurants)
+                {
+                    ResultsListBox.Items.Add(restaurants);
+                }
             }
             else
             {

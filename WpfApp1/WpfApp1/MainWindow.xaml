@@ -371,6 +371,9 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
+        <ListBox x:Name="PreviousSuggestionsListbox" Grid.Row="2" Grid.ColumnSpan="2" Margin="743,0,0,0">
+            <Label x:Name="Previous_Suggested_Restaurants_Label" Content="Previous Suggested Restaurants" Width="202" RenderTransformOrigin="0.505,0.526"/>
+        </ListBox>
 
 
     </Grid>
